@@ -1,16 +1,12 @@
-# This is a sample Python script.
+from together import Together
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+client = Together(api_key="cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8")
 
+stream = client.chat.completions.create(
+  model="meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+  messages=[{"role": "user", "content": "What are the top 3 things to do in New York?"}],
+  stream=True,
+)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+for chunk in stream:
+  print(chunk.choices[0].delta.content or "", end="", flush=True)
