@@ -6,8 +6,8 @@ client = Together(api_key="cbea512d1bf322aee99d7ce57605f76213a88036512f376396654
 
 # Key user inputs
 user_input = {
-    "arrival_date": "2024-03-19",
-    "departure_date": "2024-03-23",
+    "arrival_date": "2025-03-19",
+    "departure_date": "2025-03-23",
     "arrival_time": "noon",
     'departure_time': 'noon',
     'start_location': 'Tulum, Mexico',
@@ -16,16 +16,19 @@ user_input = {
     'vibe': 'relaxing, eat, and enjoy some food',
     'number_of_travelers': '7',
     'travel_speed': 'slow to average',
-    'additional_info': "We're going to be 3 couples and 1 single person"
+    'additional_info': "We're going to be 3 couples and 1 single person. Also we plan on working remotely from 9am to 6pm during the weekday so can't really commit to anything big during those days."
 }
 
 # Crafting request message for AI
 prompt = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
 trip_info = json.dumps(user_input)
 
+print(prompt + trip_info)
+print("\n")
+
 # Calling Together AI model
 stream = client.chat.completions.create(
-  model = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+  model = "meta-llama/Llama-3.3-70B-Instruct-Turbo",
   messages = [{"role": "user", "content": (prompt + trip_info)}],
   max_tokens = 1000,
   stream = True
