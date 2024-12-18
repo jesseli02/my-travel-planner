@@ -1,8 +1,10 @@
-from together import Together
+from together import Together as tg
 import json
+import streamlit as st
+import pandas as pd
 
 # Initialize Together AI client
-client = Together(api_key="cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8")
+client = tg(api_key="cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8")
 
 # Key user inputs
 user_input = {
@@ -15,15 +17,18 @@ user_input = {
     'daily_budget': '200 CAD per person per day',
     'vibe': 'relaxing, eat, and enjoy some food',
     'number_of_travelers': '7',
-    'travel_speed': 'slow to average',
-    'additional_info': "We're going to be 3 couples and 1 single person. Also we plan on working remotely from 9am to 6pm during the weekday so can't really commit to anything big during those days."
+    'travel_speed': 'average speed',
+    'must-visit places' : 'cenotes',
+    'interests' : 'eating authentic mexican food, exploring culture, enjoying the nice weather and beaches',
+    'additional_info' : "2 of our friends will be only joining us on the Friday at noon. We plan on working remotely from 9am to 6pm during the weekday so can't really commit to anything big during those days."
 }
 
 # Crafting request message for AI
 prompt = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
 trip_info = json.dumps(user_input)
 
-print(prompt + trip_info)
+print(prompt)
+print(trip_info)
 print("\n")
 
 # Calling Together AI model
