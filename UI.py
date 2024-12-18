@@ -14,7 +14,7 @@ text_questions = [
 ]
 
 for question in text_questions:
-    answer = st.text(question)
+    answer = st.text_input(question)
     user_input.append({question:answer})
 
 print(user_input)
