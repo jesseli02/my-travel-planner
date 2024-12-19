@@ -52,7 +52,7 @@ def refresh(n):
 
 st.button(
     label = "Unleash the power of AI to generate my travel itinerary",
-    type = 'secondary'
+    type = 'primary'
 )
 st.write(iteration)
 
