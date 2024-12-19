@@ -26,7 +26,7 @@ questions_table = pd.DataFrame(questions, columns=question_headers)
 input_details = []
 
 # Translate question table to UI on Streamlit
-for question in questions_table:
+for question in questions_table.todict(orient ='records'):
     match question['InputType']:
         case 'text':
             answer = st.text_input(
