@@ -45,9 +45,18 @@ for question in questions_table.to_dict(orient ='records'):
 
     input_details.append({'question': question['QuestionName'], 'answer': answer})
 
-# Click a submit button
+# Create button UI to a generate itinerary
+iteration = 0
+def refresh(n):
+    return n + 1
 
-# Send to model
+st.button(
+    label = "Unleash the power of AI to generate my travel itinerary",
+    callback = refresh(iteration)
+)
+st.write(iteration)
+
+# Button action to begin
 
 # Get back model
 
