@@ -8,15 +8,15 @@ question_headers = ['QuestionName', 'QuestionText', 'PlaceholderText', 'InputTyp
 questions = [
     ['Arrival location', 'Where are you starting your first day?', 'Brisbane, Australia', 'text', 'mandatory'],
     ['Departure location', 'Where are you leaving on your last day?', 'Melbourne, Australia', 'text', 'mandatory'],
-    ['Arrival date', 'What date if your first day?', None , 'date', 'mandatory'],
+    ['Arrival date', 'What date is your first day?', None , 'date', 'mandatory'],
     ['Departure date', 'What date is your last day?', None, 'date', 'mandatory'],
     ['Arrival time', 'What time do you start on your first day', None, 'time', 'optional'],
     ['Departure time', 'What time do you end on your last day', None, 'time', 'optional'],
-    ['Travelers', 'How many people are you traveling with including yourself?', '2 couples so 4 people in total', 'text', 'mandatory'],
-    ['Activities in mind', 'Are there any activities/sites on your list that you want to visit', 'Sydney Opera House, Bondi Beach, Visit the Gold Coast', 'text', 'optional'],
+    ['Travelers', 'How many people are you traveling with including yourself?', '2 couples, so 4 people in total', 'text', 'mandatory'],
+    ['Activities in mind', 'Are there any activities/sites on your list that you want to visit', 'Sydney Opera House, Bondi Beach, See the Gold Coast', 'text', 'optional'],
     ['Travel style', 'Can you share anything about your travel style?', 'I try to avoid places where there are long line ups', 'text', 'optional'],
     ['Interests', 'What are your general interests when traveling?', 'I enjoy walking around, trying new foods and exploring the culture', ' text', 'optional'],
-    ['Trip Budget', 'Do you have a daily budget in mind', 'We plan to $2000 CAD total, excluding flights', 'text', 'optional'],
+    ['Trip Budget', 'Do you have a daily budget in mind', 'We plan to spend $2000 CAD total per person, excluding flights', 'text', 'optional'],
     ['Additional info', 'Is there anything else that would be good for know to help plan your trip itinerary?', 'I am a morning person', 'text', 'optional']
 ]
 
@@ -31,7 +31,7 @@ for question in questions_table.to_dict(orient ='records'):
         case 'text':
             answer = st.text_input(
                 label = question['QuestionText'],
-                placeholder = question['PlaceholderText']
+                placeholder = 'E.g., ' + question['PlaceholderText']
             )
         case 'date':
             answer = st.date_input(
