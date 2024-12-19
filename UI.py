@@ -19,13 +19,11 @@ questions = [
     ['Trip Budget', 'Do you have a daily budget in mind', 'We plan to spend $2000 CAD total per person, excluding flights', 'text', 'optional'],
     ['Additional info', 'Is there anything else that would be good for know to help plan your trip itinerary?', 'I am a morning person', 'text', 'optional']
 ]
-
 questions_table = pd.DataFrame(questions, columns=question_headers)
 
-
+# Translate question table to UI on Streamlit
 input_details = []
 
-# Translate question table to UI on Streamlit
 for question in questions_table.to_dict(orient ='records'):
     match question['InputType']:
         case 'text':
@@ -39,16 +37,23 @@ for question in questions_table.to_dict(orient ='records'):
             )
         case 'time':
             answer = st.time_input(
-                label = question['QuestionText']
+                label = question['QuestionText'],
+                step = 1800
             )
         case _:
             answer = None
 
     input_details.append({'question': question['QuestionName'], 'answer': answer})
 
+# Click a submit button
+
+# Send to model
+
+# Get back model
+
 # Print out user input details as summary
 
-
+# Print out the model travel itinerary output
 
 
 
