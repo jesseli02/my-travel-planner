@@ -31,7 +31,7 @@ for question in questions_table.todict(orient ='records'):
         case 'text':
             answer = st.text_input(
                 label = question['QuestionText'],
-                placeholder = ['PlaceholderText']
+                placeholder = question['PlaceholderText']
             )
         case 'date':
             answer = st.date_input(
