@@ -51,8 +51,7 @@ def refresh(n):
     return n + 1
 
 st.button(
-    label = "Unleash the power of AI to generate my travel itinerary",
-    callback = refresh(iteration)
+    label = "Unleash the power of AI to generate my travel itinerary"
 )
 st.write(iteration)
 
