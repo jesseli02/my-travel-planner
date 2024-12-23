@@ -55,6 +55,7 @@ st.button(
     type = 'primary'
 )
 st.write(iteration)
+st.write(input_details)
 
 # Button action to begin
 
