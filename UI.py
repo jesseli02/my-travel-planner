@@ -1,7 +1,7 @@
 import json
 import streamlit as st
 import pandas as pd
-from together import Together as tg
+import together as tg
 
 # Create master list of questions
 
