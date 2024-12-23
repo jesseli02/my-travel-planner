@@ -26,6 +26,8 @@ input_details = []
 
 with st.form(key = 'submission_form'):
     key = 'submission_form',
+    enter_to_submit = False,
+    border = False,
 
     for question in questions_table.to_dict(orient ='records'):
         input_type = question['InputType']
