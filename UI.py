@@ -24,14 +24,14 @@ questions_table = pd.DataFrame(questions, columns=question_headers)
 # Translate question table to UI on Streamlit
 input_details = []
 
-with st.form(key = 'submission_form')
+with st.form(key = 'submission_form'):
     key = 'submission_form',
 
     for question in questions_table.to_dict(orient ='records'):
         input_type = question['InputType']
 
         if input_type == 'text':
-            answer == st.text_input(
+            answer = st.text_input(
                 label = question['QuestionText'],
                 placeholder = question['PlaceholderText']
             )
@@ -39,7 +39,7 @@ with st.form(key = 'submission_form')
             answer = st.date_input(
                 label=question['QuestionText']
             )
-        elif input_time == 'time':
+        elif input_type == 'time':
             answer = st.time_input(
                 label=question['QuestionText'],
                 step=1800
