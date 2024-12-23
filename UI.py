@@ -60,17 +60,27 @@ if submitted:
     client = tg(api_key="cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8")
 
     prompt = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
-    trip_info = json.dumps(input_details)
+
+    # Format the trip_info as a readable string
+    trip_info = "\n".join([f"{item['question']}: {item['answer']}" for item in input_details])
+
+    # Construct the full prompt
+    full_prompt = f"{prompt}\n{trip_info}"
 
     stream = client.chat.completions.create(
         model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
-        messages=[{"role": "user", "content": (prompt + trip_info)}],
+        messages=[{"role": "user", "content": full_prompt}],
         max_tokens=1000,
         stream=True
     )
 
-    st.write("Here's what I gathered from your travel input details:")
+    itinerary = ""
 
+    for chunk in stream:
+        print(chunk.choices[0].delta.content or "", end="", flush=True)
+
+    st.write("Here's what I gathered from your travel input details:")
+    st.write(itinerary)
 
 # Button action to begin
 
