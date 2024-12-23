@@ -1,6 +1,7 @@
 import json
 import streamlit as st
 import pandas as pd
+from together import Together as tg
 
 # Create master list of questions
 
@@ -55,7 +56,7 @@ with st.form(key = 'submission_form'):
 
 if submitted:
     st.write("Here's what I gathered from your travel input details:")
-    st.table(input_details)
+
 
 # Button action to begin
 
