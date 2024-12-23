@@ -77,7 +77,10 @@ if submitted:
     itinerary = ""
 
     for chunk in stream:
-        print(chunk.choices[0].delta.content or "", end="", flush=True)
+        content = chunk.get('choices', [{}])[0].get('delta', {}).get('content', '')
+        if content:
+            itinerary += content
+            st.text(itinerary)
 
     st.write("Here's what I gathered from your travel input details:")
     st.write(itinerary)
