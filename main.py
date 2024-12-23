@@ -1,4 +1,4 @@
-import together as tg
+from together import Together as tg
 import json
 import streamlit as st
 import pandas as pd

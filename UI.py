@@ -1,7 +1,7 @@
 import json
 import streamlit as st
 import pandas as pd
-import together as tg
+from together import Together as tg
 
 # Create master list of questions
 
@@ -62,7 +62,6 @@ if submitted:
     prompt = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
     trip_info = json.dumps(input_details)
 
-    # Calling Together AI model
     stream = client.chat.completions.create(
         model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
         messages=[{"role": "user", "content": (prompt + trip_info)}],
