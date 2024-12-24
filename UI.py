@@ -1,4 +1,3 @@
-import json
 import streamlit as st
 import pandas as pd
 from together import Together as tg
@@ -62,7 +61,7 @@ if submitted:
     prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
 
     # Format the trip_info as a readable string
-    prompt2 = json.dumps(input_details)
+    prompt2 = str(input_details)
 
     stream = client.chat.completions.create(
         model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
