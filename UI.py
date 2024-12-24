@@ -62,7 +62,7 @@ if submitted:
     prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
 
     # Format the trip_info as a readable string
-    prompt2 = str(input_details)
+    prompt2 = json.dumps(input_details)
 
     stream = client.chat.completions.create(
         model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
@@ -74,6 +74,7 @@ if submitted:
     itinerary = ""
 
     st.write("Here's what I gathered from your travel input details:")
+    st.write(prompt1 + prompt2)
     st.write(stream)
 
 # Button action to begin
