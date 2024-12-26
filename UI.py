@@ -73,33 +73,30 @@ if submitted:
     prompt2 = json.dumps(input_details, indent = 2)
     full_prompt = prompt1 + prompt2
 
-    stream = client.chat.completions.create(
-        model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
-        messages=[{"role": "user", "content": full_prompt}],
-        max_tokens=1000,
-        stream=True
-    )
+    # Display the full prompt for debugging (optional)
+    st.markdown("### Prompt Sent to AI")
+    st.code(full_prompt)
 
-    itinerary = ""
-    itinerary_placeholder = st.empty()  # Placeholder to update itinerary in real-time
+    # Call Together API without streaming
+    try:
+        response = client.chat.completions.create(
+            model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
+            messages=[{"role": "user", "content": full_prompt}],
+            max_tokens=1000
+            # stream=True  # Removed streaming
+        )
+    except Exception as e:
+        st.error(f"API request failed: {e}")
+        st.stop()
 
-    # Process the streaming response
-    with st.spinner("Generating your travel itinerary..."):
-        try:
-            for chunk in stream:
-                # Debug: Display each chunk received
-                # st.write(chunk)  # Uncomment for debugging
-
-                if 'choices' in chunk and len(chunk['choices']) > 0:
-                    # The structure of the chunk depends on the API's response
-                    # Adjust the keys as necessary
-                    content = chunk['choices'][0].get('delta', {}).get('content', '')
-                    if content:
-                        itinerary += content
-                        itinerary_placeholder.text(itinerary)  # Update itinerary in real-time
-        except Exception as e:
-            st.error(f"Error while processing the stream: {e}")
-            st.stop()
+    # Extract the itinerary from the response
+    try:
+        # The exact extraction depends on the API's response structure
+        # Here's a common structure similar to OpenAI's API
+        itinerary = response['choices'][0]['message']['content']
+    except (KeyError, IndexError) as e:
+        st.error(f"Error parsing the API response: {e}")
+        st.stop()
 
     if itinerary:
         st.success("Your travel itinerary has been generated!")
@@ -107,5 +104,3 @@ if submitted:
         st.write(itinerary)
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
-
-
