@@ -165,7 +165,6 @@ if submitted:
                     content = chunk['choices'][0].get('delta', {}).get('content', '')
                     if content:
                         itinerary_text += content
-                        itinerary_placeholder.text(itinerary_text)  # Update the placeholder
             except (KeyError, IndexError, AttributeError) as e:
                 st.error(f"❌ Error processing chunk: {e}")
                 break  # Exit the loop on error
