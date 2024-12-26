@@ -85,7 +85,7 @@ if submitted:
                     st.text(itinerary)  # Update the itinerary in real-time
 
     st.success("Your travel itinerary has been generated!")
-    st.write(itinerary)
+    st.write(full_prompt)
 
 # Button action to begin
 
