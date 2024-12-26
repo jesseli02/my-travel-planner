@@ -25,7 +25,7 @@ questions_table = pd.DataFrame(questions, columns=question_headers)
 # Translate question table to UI on Streamlit
 input_details = []
 
-with st.form(key = 'submission_form', enter_to_submit = False, border = False):
+with st.form(key = 'submission_form', enter_to_submit = False):
     for question in questions_table.to_dict(orient ='records'):
         input_type = question['InputType']
 
@@ -56,8 +56,16 @@ with st.form(key = 'submission_form', enter_to_submit = False, border = False):
 
 if submitted:
 
-    #Call Together API
-    client = tg(api_key="cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8")
+    st.subheader("Your Travel Details")
+    for item in input_details:
+        st.markdown(f"**{item['question']}**: {item['answer']}")
+
+    # Initialize the Together client
+    try:
+        client = tg(api_key="cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8")
+    except Exception as e:
+        st.error(f"Failed to initialize Together client: {e}")
+        st.stop()
 
     prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
 
@@ -85,7 +93,7 @@ if submitted:
                     st.text(itinerary)  # Update the itinerary in real-time
 
     st.success("Your travel itinerary has been generated!")
-    st.write(full_prompt)
+    st.write(itinerary)
 
 # Button action to begin
 
