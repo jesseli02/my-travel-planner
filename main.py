@@ -180,3 +180,7 @@ def main():
             st.info(itinerary_text)
         else:
             st.warning("⚠️ No itinerary was generated. Please check your inputs and try again.")
+
+
+if __name__ == "__main__":
+    main()
