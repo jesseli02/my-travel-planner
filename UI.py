@@ -89,7 +89,7 @@ if submitted:
     if success == 1:
         st.success("Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
-        for chunk in stream:
-            st.markdown(chunk.choices[0].delta.content or "", end="", flush=True)
+        st.write_stream(stream)
+
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
