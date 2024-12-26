@@ -177,7 +177,7 @@ def main():
                     break  # Exit the loop on error
 
             # Optionally, display the complete itinerary
-            st.info(itinerary_text)
+            st.write_stream(itinerary_text)
         else:
             st.warning("⚠️ No itinerary was generated. Please check your inputs and try again.")
 
