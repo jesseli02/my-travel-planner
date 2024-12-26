@@ -75,49 +75,21 @@ if submitted:
 
     # Call Together API without streaming
     try:
-        response = client.chat.completions.create(
+        stream = client.chat.completions.create(
             model = "meta-llama/Llama-3.3-70B-Instruct-Turbo",
             messages = [{"role": "user", "content": full_prompt}],
-            max_tokens = 1000
+            max_tokens = 1000,
+            stream = True
         )
+        success = 1
     except Exception as e:
         st.error(f"API request failed: {e}")
         st.stop()
 
-    # Extract the itinerary from the response
-    try:
-        # The exact extraction depends on the API's response structure
-        # Here's a common structure similar to OpenAI's API
-        itinerary = response
-    except (KeyError, IndexError) as e:
-        st.error(f"Error parsing the API response: {e}")
-        st.stop()
-
-    if itinerary:
+    if success == 1:
         st.success("Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
-
-        # Split the itinerary into days
-        days = itinerary.split('\n\n')
-
-        # Extract day titles for tabs
-        tab_labels = [day.split('\n')[0] for day in days if day.strip()]
-
-        # Create tabs
-        tabs = st.tabs(tab_labels)
-
-        for tab, day in zip(tabs, days):
-            if day.strip():
-                lines = day.split('\n')
-                day_title = lines[0]
-                activities = lines[1:]
-
-                with tab:
-                    # Bold day title
-                    st.markdown(f"**{day_title}**")
-                    # List activities
-                    for activity in activities:
-                        st.markdown(f"- {activity}")
-
+        for chunk in stream:
+            st.markdown(chunk.choices[0].delta.content or "", end="", flush=True)
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
