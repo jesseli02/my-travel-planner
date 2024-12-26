@@ -93,7 +93,7 @@ if submitted:
     try:
         # The exact extraction depends on the API's response structure
         # Here's a common structure similar to OpenAI's API
-        itinerary = response['choices'][0]['message']['content']
+        itinerary = response
     except (KeyError, IndexError) as e:
         st.error(f"Error parsing the API response: {e}")
         st.stop()
