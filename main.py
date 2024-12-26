@@ -178,6 +178,7 @@ def main():
 
             # Optionally, display the complete itinerary
             st.write(itinerary_text)
+
         else:
             st.warning("⚠️ No itinerary was generated. Please check your inputs and try again.")
 
