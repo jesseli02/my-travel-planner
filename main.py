@@ -116,7 +116,7 @@ def main():
     input_details = []
 
     # Create a form to collect user inputs
-    with st.form(key='submission_form', clear_on_submit=True):
+    with st.form(key='submission_form', enter_to_submit = False):
         for question in questions:
             input_type = question['InputType']
             question_text = question['QuestionText']
