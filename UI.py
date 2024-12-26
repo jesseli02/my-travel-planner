@@ -73,17 +73,12 @@ if submitted:
     prompt2 = json.dumps(input_details, indent = 2)
     full_prompt = prompt1 + prompt2
 
-    # Display the full prompt for debugging (optional)
-    st.markdown("### Prompt Sent to AI")
-    st.code(full_prompt)
-
     # Call Together API without streaming
     try:
         response = client.chat.completions.create(
-            model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
-            messages=[{"role": "user", "content": full_prompt}],
-            max_tokens=1000,
-            stream=True
+            model = "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+            messages = [{"role": "user", "content": full_prompt}],
+            max_tokens = 1000
         )
     except Exception as e:
         st.error(f"API request failed: {e}")
