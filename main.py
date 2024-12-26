@@ -100,88 +100,79 @@ def generate_itinerary(api_key, prompt):
 
         # Call the TogetherAI API with streaming enabled
         stream = client.chat.completions.create(
-            model="meta-llama/Llama-3.3-70B-Instruct-Turbo",  # Ensure this is the correct model name
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=1000,
-            stream=True
+            model = "meta-llama/Llama-3.3-70B-Instruct-Turbo",  # Ensure this is the correct model name
+            messages = [{"role": "user", "content": prompt}],
+            max_tokens = 1000,
+            stream=  True
         )
         return stream
     except Exception as e:
         st.error(f"❌ API request failed: {e}")
         return None
 
+input_details = []
+# Create a form to collect user inputs
+with st.form(key='submission_form', enter_to_submit = False):
+    for question in questions:
+        input_type = question['InputType']
+        question_text = question['QuestionText']
+        placeholder = question['PlaceholderText']
 
-# Streamlit App
-def main():
-    input_details = []
-
-    # Create a form to collect user inputs
-    with st.form(key='submission_form', enter_to_submit = False):
-        for question in questions:
-            input_type = question['InputType']
-            question_text = question['QuestionText']
-            placeholder = question['PlaceholderText']
-
-            # Create input widgets based on the InputType
-            if input_type == 'text':
-                answer = st.text_input(label=question_text, placeholder=placeholder)
-            elif input_type == 'date':
-                answer = st.date_input(label=question_text)
-                answer = answer.strftime('%Y-%m-%d')  # Convert to string
-            elif input_type == 'time':
-                answer = st.time_input(label=question_text, step=1800)  # 30-minute intervals
-                answer = answer.strftime('%H:%M:%S')  # Convert to string
-            else:
-                answer = ""
-
-            # Append the answer with its question name
-            input_details.append({'question': question['QuestionName'], 'answer': answer})
-
-        # Submit button
-        submitted = st.form_submit_button("Generate Itinerary")
-
-    if submitted:
-        # Display the entered travel details
-        st.subheader("Your Travel Details")
-        for item in input_details:
-            st.markdown(f"**{item['question']}**: {item['answer']}")
-
-        # Prepare the prompt for the API
-        prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n\n"
-        prompt2 = json.dumps(input_details, indent=2)
-        full_prompt = prompt1 + prompt2
-
-        # Call the TogetherAI API
-        api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Replace with your API key or use st.secrets
-        stream = generate_itinerary(api_key, full_prompt)
-
-        if stream:
-            st.success("🎉 Your travel itinerary has been generated!")
-            st.markdown("### Generated Itinerary")
-
-            # Create a placeholder to display the itinerary as it streams
-            itinerary_placeholder = st.empty()
-            itinerary_text = ""
-
-            # Iterate over the streaming response
-            for chunk in stream:
-                try:
-                    if 'choices' in chunk and len(chunk['choices']) > 0:
-                        # Extract the content from each chunk
-                        content = chunk['choices'][0].get('delta', {}).get('content', '')
-                        if content:
-                            itinerary_text += content
-                            itinerary_placeholder.text(itinerary_text)  # Update the placeholder
-                except (KeyError, IndexError, AttributeError) as e:
-                    st.error(f"❌ Error processing chunk: {e}")
-                    break  # Exit the loop on error
-
-            # Optionally, display the complete itinerary
-            st.write(itinerary_text)
-
+        # Create input widgets based on the InputType
+        if input_type == 'text':
+            answer = st.text_input(label=question_text, placeholder=placeholder)
+        elif input_type == 'date':
+            answer = st.date_input(label=question_text)
+            answer = answer.strftime('%Y-%m-%d')  # Convert to string
+        elif input_type == 'time':
+            answer = st.time_input(label=question_text, step=1800)  # 30-minute intervals
+            answer = answer.strftime('%H:%M:%S')  # Convert to string
         else:
-            st.warning("⚠️ No itinerary was generated. Please check your inputs and try again.")
+            answer = ""
 
+        # Append the answer with its question name
+        input_details.append({'question': question['QuestionName'], 'answer': answer})
 
-if __name__ == "__main__":
-    main()
+    # Submit button
+    submitted = st.form_submit_button("Generate Itinerary")
+
+if submitted:
+    # Display the entered travel details
+    st.subheader("Your Travel Details")
+    for item in input_details:
+        st.markdown(f"**{item['question']}**: {item['answer']}")
+
+    # Prepare the prompt for the API
+    prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n\n"
+    prompt2 = json.dumps(input_details, indent=2)
+    full_prompt = prompt1 + prompt2
+
+    # Call the TogetherAI API
+    api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Replace with your API key or use st.secrets
+    stream = generate_itinerary(api_key, full_prompt)
+
+    if stream:
+        st.success("🎉 Your travel itinerary has been generated!")
+        st.markdown("### Generated Itinerary")
+
+        itinerary_text = ""
+
+        # Iterate over the streaming response
+        for chunk in stream:
+            try:
+                if 'choices' in chunk and len(chunk['choices']) > 0:
+                    # Extract the content from each chunk
+                    content = chunk['choices'][0].get('delta', {}).get('content', '')
+                    if content:
+                        itinerary_text += content
+                        itinerary_placeholder.text(itinerary_text)  # Update the placeholder
+            except (KeyError, IndexError, AttributeError) as e:
+                st.error(f"❌ Error processing chunk: {e}")
+                break  # Exit the loop on error
+
+        # Optionally, display the complete itinerary
+        st.write(itinerary_text)
+
+    else:
+        st.warning("⚠️ No itinerary was generated. Please check your inputs and try again.")
+
