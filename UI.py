@@ -82,8 +82,8 @@ if submitted:
         response = client.chat.completions.create(
             model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
             messages=[{"role": "user", "content": full_prompt}],
-            max_tokens=1000
-            # stream=True  # Removed streaming
+            max_tokens=1000,
+            stream=True
         )
     except Exception as e:
         st.error(f"API request failed: {e}")
