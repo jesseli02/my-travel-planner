@@ -35,13 +35,17 @@ with st.form(key = 'submission_form', enter_to_submit = False, border = False):
                 placeholder = question['PlaceholderText']
             )
         elif input_type == 'date':
-            answer = st.date_input(
-                label=question['QuestionText']
+            answer = str(
+                    st.date_input(
+                    label=question['QuestionText']
+                )
             )
         elif input_type == 'time':
-            answer = st.time_input(
-                label=question['QuestionText'],
-                step=1800
+            answer = str(
+                st.time_input(
+                    label=question['QuestionText'],
+                    step=1800
+                )
             )
         else:
             answer = None
