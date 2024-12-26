@@ -25,11 +25,7 @@ questions_table = pd.DataFrame(questions, columns=question_headers)
 # Translate question table to UI on Streamlit
 input_details = []
 
-with st.form(key = 'submission_form'):
-    key = 'submission_form',
-    enter_to_submit = False,
-    border = False,
-
+with st.form(key = 'submission_form', enter_to_submit = False, border = False):
     for question in questions_table.to_dict(orient ='records'):
         input_type = question['InputType']
 
@@ -62,20 +58,30 @@ if submitted:
     prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below: "
 
     # Format the trip_info as a readable string
-    prompt2 = json.dumps(input_details)
+    prompt2 = json.dumps(input_details, indent = 2)
+    full_prompt = prompt1 + prompt2
 
     stream = client.chat.completions.create(
         model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
-        messages=[{"role": "user", "content": (prompt1 + prompt2)}],
+        messages=[{"role": "user", "content": full_prompt}],
         max_tokens=1000,
         stream=True
     )
 
     itinerary = ""
 
-    st.write("Here's what I gathered from your travel input details:")
-    st.write(prompt1 + prompt2)
-    st.write(stream)
+    # Optionally, add a progress indicator
+    with st.spinner("Generating your travel itinerary..."):
+        for chunk in stream:
+            # Adjust the extraction based on the actual stream structure
+            if 'choices' in chunk and len(chunk['choices']) > 0:
+                content = chunk['choices'][0].get('delta', {}).get('content', '')
+                if content:
+                    itinerary += content
+                    st.text(itinerary)  # Update the itinerary in real-time
+
+    st.success("Your travel itinerary has been generated!")
+    st.write(itinerary)
 
 # Button action to begin
 
