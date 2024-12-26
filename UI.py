@@ -96,6 +96,28 @@ if submitted:
     if itinerary:
         st.success("Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
-        st.markdown(itinerary)
+
+        # Split the itinerary into days
+        days = itinerary.split('\n\n')
+
+        # Extract day titles for tabs
+        tab_labels = [day.split('\n')[0] for day in days if day.strip()]
+
+        # Create tabs
+        tabs = st.tabs(tab_labels)
+
+        for tab, day in zip(tabs, days):
+            if day.strip():
+                lines = day.split('\n')
+                day_title = lines[0]
+                activities = lines[1:]
+
+                with tab:
+                    # Bold day title
+                    st.markdown(f"**{day_title}**")
+                    # List activities
+                    for activity in activities:
+                        st.markdown(f"- {activity}")
+
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
