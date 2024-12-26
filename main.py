@@ -106,8 +106,8 @@ def generate_itinerary(api_key, prompt):
             stream=  True
         )
         return stream
-    except Exception as e:
-        st.error(f"❌ API request failed: {e}")
+    except Exception:
+        st.error("API request failed")
         return None
 
 input_details = []
@@ -140,10 +140,10 @@ if submitted:
     # Display the entered travel details
     st.subheader("Your Travel Details")
     for item in input_details:
-        st.markdown(f"**{item['question']}**: {item['answer']}")
+        st.markdown(f"{item['question']}: {item['answer']}")
 
     # Prepare the prompt for the API
-    prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n\n"
+    prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n"
     prompt2 = json.dumps(input_details, indent=2)
     full_prompt = prompt1 + prompt2
 
@@ -152,7 +152,7 @@ if submitted:
     stream = generate_itinerary(api_key, full_prompt)
 
     if stream:
-        st.success("🎉 Your travel itinerary has been generated!")
+        st.success("Success! Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
 
         itinerary_text = ""
@@ -165,14 +165,13 @@ if submitted:
                     content = chunk['choices'][0].get('delta', {}).get('content', '')
                     if content:
                         itinerary_text += content
-                        itinerary_placeholder.text(itinerary_text)  # Update the placeholder
-            except (KeyError, IndexError, AttributeError) as e:
-                st.error(f"❌ Error processing chunk: {e}")
+            except (KeyError, IndexError, AttributeError):
+                st.error("Error processing chunk")
                 break  # Exit the loop on error
 
         # Optionally, display the complete itinerary
         st.write(itinerary_text)
 
     else:
-        st.warning("⚠️ No itinerary was generated. Please check your inputs and try again.")
+        st.warning("No itinerary was generated. Please check your inputs and try again.")
 
