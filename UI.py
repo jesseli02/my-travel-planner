@@ -81,27 +81,31 @@ if submitted:
     )
 
     itinerary = ""
+    itinerary_placeholder = st.empty()  # Placeholder to update itinerary in real-time
 
-    # Optionally, add a progress indicator
+    # Process the streaming response
     with st.spinner("Generating your travel itinerary..."):
-        for chunk in stream:
-            # Adjust the extraction based on the actual stream structure
-            if 'choices' in chunk and len(chunk['choices']) > 0:
-                content = chunk['choices'][0].get('delta', {}).get('content', '')
-                if content:
-                    itinerary += content
-                    st.text(itinerary)  # Update the itinerary in real-time
+        try:
+            for chunk in stream:
+                # Debug: Display each chunk received
+                # st.write(chunk)  # Uncomment for debugging
 
-    st.success("Your travel itinerary has been generated!")
-    st.write(itinerary)
+                if 'choices' in chunk and len(chunk['choices']) > 0:
+                    # The structure of the chunk depends on the API's response
+                    # Adjust the keys as necessary
+                    content = chunk['choices'][0].get('delta', {}).get('content', '')
+                    if content:
+                        itinerary += content
+                        itinerary_placeholder.text(itinerary)  # Update itinerary in real-time
+        except Exception as e:
+            st.error(f"Error while processing the stream: {e}")
+            st.stop()
 
-# Button action to begin
-
-# Get back model
-
-# Print out user input details as summary
-
-# Print out the model travel itinerary output
-
+    if itinerary:
+        st.success("Your travel itinerary has been generated!")
+        st.markdown("### Generated Itinerary")
+        st.write(itinerary)
+    else:
+        st.warning("No itinerary was generated. Please check your inputs and try again.")
 
 
