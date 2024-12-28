@@ -103,7 +103,7 @@ def generate_itinerary(api_key, prompt):
             model = "meta-llama/Llama-3.3-70B-Instruct-Turbo",  # Ensure this is the correct model name
             messages = [{"role": "user", "content": prompt}],
             max_tokens = 1000,
-            stream=  True
+            stream = False
         )
         return stream
     except Exception:
@@ -155,23 +155,7 @@ if submitted:
         st.success("Success! Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
 
-        itinerary_text = ""
-
-        # Iterate over the streaming response
-        for chunk in stream:
-            try:
-                if 'choices' in chunk and len(chunk['choices']) > 0:
-                    # Extract the content from each chunk
-                    content = chunk['choices'][0].get('delta', {}).get('content', '')
-                    if content:
-                        itinerary_text += content
-                    st.write(itinerary_text)
-            except (KeyError, IndexError, AttributeError):
-                st.error("Error processing chunk")
-                break  # Exit the loop on error
-
-        # Optionally, display the complete itinerary
-        st.write(itinerary_text)
+        st.write(stream)
 
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
