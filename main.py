@@ -91,7 +91,6 @@ questions = [
     }
 ]
 
-
 # Function to call TogetherAI's
 def generate_itinerary(api_key, prompt):
     try:
