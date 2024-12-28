@@ -149,13 +149,12 @@ if submitted:
 
     # Call the TogetherAI API
     api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Replace with your API key or use st.secrets
-    stream = generate_itinerary(api_key, full_prompt)
+    itinerary = generate_itinerary(api_key, full_prompt)
 
-    if stream:
+    if itinerary:
         st.success("Success! Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
-
-        st.write(stream)
+        st.write(itinerary)
 
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
