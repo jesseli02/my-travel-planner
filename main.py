@@ -102,7 +102,6 @@ def generate_itinerary(api_key, prompt):
             model = "meta-llama/Llama-3.3-70B-Instruct-Turbo",  # Ensure this is the correct model name
             messages = [{"role": "user", "content": prompt}],
             max_tokens = 1000,
-            response_format = {"type": "string"},
             stream = False
         )
         return stream
