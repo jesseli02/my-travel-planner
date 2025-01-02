@@ -154,8 +154,7 @@ if submitted:
         st.success("Success! Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
 
-        output = itinerary.content
-        st.write(output)
+        st.markdown(itinerary)
 
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
