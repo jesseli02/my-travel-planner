@@ -154,7 +154,12 @@ if submitted:
         st.success("Success! Your travel itinerary has been generated!")
         st.markdown("### Generated Itinerary")
 
-        st.markdown(itinerary)
+        # Parse the JSON string
+        response = json.loads(itinerary)
+
+        # Extract the content
+        content = response['choices'][0]['message']['content']
+        st.write(content)
 
     else:
         st.warning("No itinerary was generated. Please check your inputs and try again.")
