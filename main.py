@@ -162,13 +162,10 @@ def main():
 
         # Prepare and call the Together AI API
         st.info("Generating your itinerary...")
-        api_key = st.secrets["TOGETHER_AI_API_KEY"]  # Access the API key from secrets
-        itinerary = generate_itinerary(api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8", prompt = input_details)
+        api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
+        itinerary = generate_itinerary(api_key, prompt = input_details)
 
         # Display the generated itinerary
         st.markdown("### Generated Itinerary")
         st.write(itinerary)
 
-
-if __name__ == "__main__":
-    main()
