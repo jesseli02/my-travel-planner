@@ -103,7 +103,7 @@ def generate_itinerary(api_key, prompt):
 
     # Prepare the prompt by formatting user details
     prompt_intro = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n"
-    prompt_details = "\n".join([f"**{item['question']}:** {item['answer']}" for item in questions])
+    prompt_details = "\n".join([f"**{item['question']}:** {item['answer']}" for item in prompt])
     full_prompt = prompt_intro + prompt_details
 
     payload = {
