@@ -169,3 +169,5 @@ def main():
         st.markdown("### Generated Itinerary")
         st.write(itinerary)
 
+if __name__ == "__main__":
+    main()
