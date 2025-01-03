@@ -163,7 +163,7 @@ def main():
         # Prepare and call the Together AI API
         st.info("Generating your itinerary...")
         api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
-        itinerary = generate_itinerary(api_key = api_key, prompt = input_details)
+        itinerary = generate_itinerary(api_key = api_key, prompt = questions)
 
         # Display the generated itinerary
         st.markdown("### Generated Itinerary")
