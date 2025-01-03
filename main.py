@@ -1,5 +1,6 @@
 import json5 as json
 import streamlit as st
+import requests
 import pandas as pd
 from together import Together as tg
 
@@ -93,74 +94,81 @@ questions = [
 
 # Function to call TogetherAI's
 def generate_itinerary(api_key, prompt):
-    try:
-        # Initialize the TogetherAI client with your API key
-        client = tg(api_key=api_key)
+    url = "https://api.together.xyz/v1/chat/completions"
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": f"Bearer {api_key}"
+    }
 
-        # Call the TogetherAI API with streaming enabled
-        stream = client.chat.completions.create(
-            model = "meta-llama/Llama-3.3-70B-Instruct-Turbo",  # Ensure this is the correct model name
-            messages = [{"role": "user", "content": prompt}],
-            max_tokens = 1000,
-            stream = False
-        )
-        return stream
-    except Exception:
-        st.error("API request failed")
-        return None
+    # Prepare the prompt by formatting user details
+    prompt_intro = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n"
+    prompt_details = "\n".join([f"**{item['question']}:** {item['answer']}" for item in questions])
+    full_prompt = prompt_intro + prompt_details
 
-input_details = []
-# Create a form to collect user inputs
-with st.form(key='submission_form', enter_to_submit = False):
-    for question in questions:
-        input_type = question['InputType']
-        question_text = question['QuestionText']
-        placeholder = question['PlaceholderText']
+    payload = {
+        "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "messages": [
+            {
+                "role": "user",
+                "content": full_prompt
+            }
+        ],
+        "max_tokens": 1000
+    }
 
-        # Create input widgets based on the InputType
-        if input_type == 'text':
-            answer = st.text_input(label=question_text, placeholder=placeholder)
-        elif input_type == 'date':
-            answer = st.date_input(label=question_text)
-            answer = answer.strftime('%Y-%m-%d')  # Convert to string
-        elif input_type == 'time':
-            answer = st.time_input(label=question_text, step=1800)  # 30-minute intervals
-            answer = answer.strftime('%H:%M:%S')  # Convert to string
-        else:
-            answer = ""
+    response = requests.post(url, json=payload, headers=headers)
+    data = response.json()
+    content = data['choices'][0]['message']['content']
+    return content
 
-        # Append the answer with its question name
-        input_details.append({'question': question['QuestionName'], 'answer': answer})
 
-    # Submit button
-    submitted = st.form_submit_button("Generate Itinerary")
+def main():
+    st.title("Travel Itinerary Generator")
 
-if submitted:
-    # Display the entered travel details
-    st.subheader("Your Travel Details")
-    for item in input_details:
-        st.markdown(f"{item['question']}: {item['answer']}")
+    input_details = []
+    # Create a form to collect user inputs
+    with st.form(key='submission_form'):
+        for question in questions:
+            input_type = question['InputType']
+            question_text = question['QuestionText']
+            placeholder = question['PlaceholderText']
+            requirement = question['Requirement']
 
-    # Prepare the prompt for the API
-    prompt1 = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n"
-    prompt2 = json.dumps(input_details, indent=2)
-    full_prompt = prompt1 + prompt2
+            # Create input widgets based on the InputType
+            if input_type == 'text':
+                answer = st.text_input(label=question_text, placeholder=placeholder, key=question['QuestionName'])
+            elif input_type == 'date':
+                answer = st.date_input(label=question_text, key=question['QuestionName'])
+                answer = answer.strftime('%Y-%m-%d')  # Convert to string
+            elif input_type == 'time':
+                answer = st.time_input(label=question_text, key=question['QuestionName'],
+                                       step=1800)  # 30-minute intervals
+                answer = answer.strftime('%H:%M:%S')  # Convert to string
+            else:
+                answer = ""
 
-    # Call the TogetherAI API
-    api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Replace with your API key or use st.secrets
-    itinerary = generate_itinerary(api_key, full_prompt)
+            # Append the answer with its question name
+            input_details.append({'question': question['QuestionName'], 'answer': answer})
 
-    if itinerary:
-        st.success("Success! Your travel itinerary has been generated!")
+        # Submit button
+        submitted = st.form_submit_button("Generate Itinerary")
+
+    if submitted:
+        # Display the entered travel details
+        st.subheader("Your Travel Details")
+        for item in input_details:
+            st.markdown(f"**{item['question']}:** {item['answer']}")
+
+        # Prepare and call the Together AI API
+        st.info("Generating your itinerary...")
+        api_key = st.secrets["TOGETHER_AI_API_KEY"]  # Access the API key from secrets
+        itinerary = generate_itinerary(api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8", prompt = input_details)
+
+        # Display the generated itinerary
         st.markdown("### Generated Itinerary")
+        st.write(itinerary)
 
-        # Parse the JSON string
-        response = json.loads(itinerary)
 
-        # Extract the content
-        content = response['choices'][0]['message']['content']
-        st.write(content)
-
-    else:
-        st.warning("No itinerary was generated. Please check your inputs and try again.")
-
+if __name__ == "__main__":
+    main()
