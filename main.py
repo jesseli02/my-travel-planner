@@ -158,11 +158,11 @@ if submitted:
         st.markdown(f"**{item['question']}:** {item['answer']}")
 
     # Prepare and call the Together AI API
-    st.info("Generating your itinerary...")
+    st.spinner("Generating your itinerary...")
     tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
 
     itinerary = generate_itinerary(api_key = tg_api_key, trip_details = input_details)
 
     # Display the generated itinerary
-    st.markdown("### Generated Itinerary")
+    st.success("### Generated Itinerary")
     st.write(itinerary)
