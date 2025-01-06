@@ -125,7 +125,7 @@ st.title("Travel Itinerary Generator")
 
 input_details = []
 # Create a form to collect user inputs
-with st.form(key='submission_form'):
+with st.form(key = 'submission_form', enter_to_submit = False):
     for question in questions:
         input_type = question['InputType']
         question_text = question['QuestionText']
@@ -134,13 +134,12 @@ with st.form(key='submission_form'):
 
         # Create input widgets based on the InputType
         if input_type == 'text':
-            answer = st.text_input(label=question_text, placeholder=placeholder, key=question['QuestionName'])
+            answer = st.text_input(label = question_text, placeholder = placeholder, key = question['QuestionName'])
         elif input_type == 'date':
-            answer = st.date_input(label=question_text, key=question['QuestionName'])
+            answer = st.date_input(label = question_text, key = question['QuestionName'])
             answer = answer.strftime('%Y-%m-%d')  # Convert to string
         elif input_type == 'time':
-            answer = st.time_input(label=question_text, key=question['QuestionName'],
-                                   step=1800)  # 30-minute intervals
+            answer = st.time_input(label = question_text, key = question['QuestionName'], step=1800)  # 30-minute intervals
             answer = answer.strftime('%H:%M:%S')  # Convert to string
         else:
             answer = ""
@@ -158,7 +157,7 @@ if submitted:
         st.markdown(f"**{item['question']}:** {item['answer']}")
 
     # Prepare and call the Together AI API
-    st.spinner("Generating your itinerary...")
+    st.spinner(text = "Generating your itinerary...")
     tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
 
     itinerary = generate_itinerary(api_key = tg_api_key, trip_details = input_details)
