@@ -104,7 +104,7 @@ def generate_itinerary(api_key, trip_details):
     # Prepare the prompt by formatting user details
     prompt_intro = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n"
     trip_details = trip_details
-    full_prompt = prompt_intro + trip_details
+    full_prompt = prompt_intro + json.dumps(trip_details)
     payload = {
         "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
         "messages": [
