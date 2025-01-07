@@ -148,7 +148,7 @@ with st.form(key = 'submission_form', enter_to_submit = False):
         input_details.append({'question': question['QuestionName'], 'answer': answer})
 
     # Submit button
-    submitted = st.form_submit_button("Generate Itinerary")
+    submitted = st.form_submit_button(label = "Generate Itinerary", type = "primary")
 
 if submitted:
     # Display the entered travel details
@@ -164,4 +164,5 @@ if submitted:
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
-    st.write(itinerary)
+    st.write_stream(itinerary)
+
