@@ -152,15 +152,15 @@ with st.form(key = 'submission_form', enter_to_submit = False):
 
 if submitted:
     # Display the entered travel details
-    st.subheader("Your Travel Details")
-    for item in input_details:
-        st.markdown(f"**{item['question']}:** {item['answer']}")
+    with st.expander("See your travel input details"):
+        for item in input_details:
+            st.markdown(f"**{item['question']}:** {item['answer']}")
 
     # Prepare and call the Together AI API
-    st.spinner(text = "Generating your itinerary...")
-    tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
+    with st.spinner(text = "Generating your itinerary..."):
+        tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
 
-    itinerary = generate_itinerary(api_key = tg_api_key, trip_details = input_details)
+        itinerary = generate_itinerary(api_key = tg_api_key, trip_details = input_details)
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
