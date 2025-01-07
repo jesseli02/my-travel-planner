@@ -57,8 +57,8 @@ questions = [
     },
     {
         'QuestionName': 'Activities in mind',
-        'QuestionText': 'Are there any activities/sites on your list that you want to visit?',
-        'PlaceholderText': 'Sydney Opera House, Bondi Beach, See the Gold Coast',
+        'QuestionText': 'Are there any particular activities/sites that you want to do or visit?',
+        'PlaceholderText': 'Visit Sydney Opera House, Bondi Beach and see the Gold Coast',
         'InputType': 'text',
         'Requirement': 'optional'
     },
@@ -129,7 +129,7 @@ with st.form(key = 'submission_form', enter_to_submit = False):
     for question in questions:
         input_type = question['InputType']
         question_text = question['QuestionText']
-        placeholder = question['PlaceholderText']
+        placeholder = 'e.g., ' + question['PlaceholderText']
         requirement = question['Requirement']
 
         # Create input widgets based on the InputType
@@ -168,7 +168,7 @@ if submitted:
 
     latest_output = itinerary
 
-    st.write(f"**Is there anything that you'd like me to help modify in your trip itinerary?")
+    #FIX - st.write(f"**Is there anything that you'd like me to help modify in your trip itinerary?")
     feedback = st.chat_input("Type your answer here")
 
     if feedback:
