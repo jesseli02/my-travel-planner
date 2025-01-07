@@ -171,10 +171,10 @@ if submitted:
     st.write("Is there anything that you'd like me to help modify in your trip itinerary?")
     feedback = st.chat_input("Type your answer here")
 
-if feedback:
+    if feedback:
+        with st.spinner(text="Revising your trip based on your feedback..."):
+            prompt = "Could you help revise my trip based on my feedback: " + feedback
+            latest_output = generate_itinerary(api_key=tg_api_key, trip_details=prompt)
 
-    with st.spinner(text = "Revising your trip based on your feedback..."):
-        prompt = "Could you help revise my trip based on my feedback: " + feedback
-        latest_output = generate_itinerary(api_key = tg_api_key, trip_details = prompt)
+        st.write(latest_output)
 
-    st.write(latest_output)
