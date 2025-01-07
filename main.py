@@ -168,7 +168,7 @@ if submitted:
 
     latest_output = itinerary
 
-    st.write("Is there anything that you'd like me to help modify in your trip itinerary?")
+    st.write(f"**Is there anything that you'd like me to help modify in your trip itinerary?")
     feedback = st.chat_input("Type your answer here")
 
     if feedback:
