@@ -164,5 +164,5 @@ if submitted:
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
-    st.write_stream(itinerary)
+    st.write(itinerary)
 
