@@ -203,14 +203,11 @@ if submitted:
     # Action for revising the itinerary
     if st.button("Revise my itinerary"):
 
-        if user_feedback.strip() == "":
-            st.warning("Please enter some feedback before submitting.")
-        else:
-            with st.spinner(text = "Re-generating your itinerary based on your feedback..."):
-                itinerary = feedback_submission(api_key = tg_api_key, itinerary = itinerary, user_feedback = user_feedback)
+        with st.spinner(text = "Re-generating your itinerary based on your feedback..."):
+            itinerary = feedback_submission(api_key = tg_api_key, itinerary = itinerary, user_feedback = user_feedback)
 
-            st.success("# Revised itinerary")
-            st.write(itinerary)
+        st.success("# Revised itinerary")
+        st.write(itinerary)
 
 
 
