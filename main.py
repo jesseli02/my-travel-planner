@@ -92,8 +92,8 @@ questions = [
     }
 ]
 
-# Function to call TogetherAI's
-def generate_itinerary(api_key, trip_details):
+# Function to call TogetherAI's for initial submission
+def form_submission(api_key, input_details):
     url = "https://api.together.xyz/v1/chat/completions"
     headers = {
         "accept": "application/json",
@@ -103,8 +103,7 @@ def generate_itinerary(api_key, trip_details):
 
     # Prepare the prompt by formatting user details
     prompt_intro = "Could you help me plan a daily itinerary for my upcoming trip? Here are the details below:\n"
-    trip_details = trip_details
-    full_prompt = prompt_intro + json.dumps(trip_details)
+    full_prompt = prompt_intro + json.dumps(input_details, indent = 2)
     payload = {
         "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
         "messages": [
@@ -121,9 +120,40 @@ def generate_itinerary(api_key, trip_details):
     content = data['choices'][0]['message']['content']
     return content
 
+def feedback_submission(api_key, itinerary, user_feedback):
+    url = "https://api.together.xyz/v1/chat/completions"
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": f"Bearer {api_key}"
+    }
+
+    prompt_intro = "Could you help me revise my current trip itinerary based on the feedback below.\n"
+    full_prompt = prompt_intro + user_feedback + "\nCurrent itinerary:\n" + itinerary
+    payload = {
+        "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "messages": [
+            {
+                "role": "user",
+                "content": full_prompt
+            }
+        ],
+        "max_tokens": 1000
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+    data = response.json()
+    content = data['choices'][0]['message']['content']
+    return content
+
+# UI start
 st.title("Travel Itinerary Generator")
 
+# Pre-defined variables
+user_feedback = ""
 input_details = []
+tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"
+
 # Create a form to collect user inputs
 with st.form(key = 'submission_form', enter_to_submit = False):
     for question in questions:
@@ -150,7 +180,9 @@ with st.form(key = 'submission_form', enter_to_submit = False):
     # Submit button
     submitted = st.form_submit_button(label = "Generate Itinerary", type = "primary")
 
+# Action once submit button is clicked
 if submitted:
+
     # Display the entered travel details
     with st.expander("See your travel input details"):
         for item in input_details:
@@ -158,14 +190,28 @@ if submitted:
 
     # Prepare and call the Together AI API
     with st.spinner(text = "Generating your itinerary..."):
-        tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"
-
-        itinerary = generate_itinerary(api_key = tg_api_key, trip_details = input_details)
+        itinerary = form_submission(api_key = tg_api_key, input_details = input_details)
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
     st.write(itinerary)
 
-    latest_output = itinerary
+    # Show feedback prompt
+    st.markdown("\n## Please let me know if you'd like me to modify anything in your itinerary:")
+    user_feedback = st.text_input("Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):")
+    st.button("Revise my itinerary")
+
+# Action for revising the itinerary
+if st.button("Revise my itinerary"):
+
+    if user_feedback.strip() == "":
+        st.warning("Please enter some feedback before submitting.")
+    else:
+        with st.spinner(text = "Re-generating your itinerary based on your feedback..."):
+            itinerary = feedback_submission(api_key = tg_api_key, itinerary = itinerary, user_feedback = user_feedback)
+
+        st.success("### Revised itinerary")
+        st.write(itinerary)
+
 
 
