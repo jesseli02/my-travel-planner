@@ -158,9 +158,8 @@ if submitted:
 
     # Prepare and call the Together AI API
     with st.spinner(text = "Generating your itinerary..."):
-        tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
 
-        itinerary = generate_itinerary(api_key = st.secrets['tg_api_key'], trip_details = input_details)
+        itinerary = generate_itinerary(api_key = st.secrets.tg_api_key, trip_details = input_details)
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
