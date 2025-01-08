@@ -198,7 +198,7 @@ if submitted:
 
     # Show feedback prompt
     user_feedback = st.text_input(
-        label = "\n### Please let me know if you'd like me to modify anything in your itinerary:",
+        label = f"\n** Please let me know if you'd like me to modify anything in your itinerary:",
         placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):"
     )
 
