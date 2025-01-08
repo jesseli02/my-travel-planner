@@ -193,25 +193,24 @@ if submitted:
         itinerary = form_submission(api_key = tg_api_key, input_details = input_details)
 
     # Display the generated itinerary
-    st.success("### Generated Itinerary")
+    st.success("# Generated Itinerary")
     st.write(itinerary)
 
     # Show feedback prompt
-    st.markdown("\n## Please let me know if you'd like me to modify anything in your itinerary:")
-    user_feedback = st.text_input("Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):")
-    st.button("Revise my itinerary")
+    st.markdown("\n# Please let me know if you'd like me to modify anything in your itinerary:")
+    user_feedback = st.text_input(placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):")
 
-# Action for revising the itinerary
-if st.button("Revise my itinerary"):
+    # Action for revising the itinerary
+    if st.button("Revise my itinerary"):
 
-    if user_feedback.strip() == "":
-        st.warning("Please enter some feedback before submitting.")
-    else:
-        with st.spinner(text = "Re-generating your itinerary based on your feedback..."):
-            itinerary = feedback_submission(api_key = tg_api_key, itinerary = itinerary, user_feedback = user_feedback)
+        if user_feedback.strip() == "":
+            st.warning("Please enter some feedback before submitting.")
+        else:
+            with st.spinner(text = "Re-generating your itinerary based on your feedback..."):
+                itinerary = feedback_submission(api_key = tg_api_key, itinerary = itinerary, user_feedback = user_feedback)
 
-        st.success("### Revised itinerary")
-        st.write(itinerary)
+            st.success("# Revised itinerary")
+            st.write(itinerary)
 
 
 
