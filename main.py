@@ -160,7 +160,7 @@ if submitted:
     with st.spinner(text = "Generating your itinerary..."):
         tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"  # Access the API key from secrets
 
-        itinerary = generate_itinerary(api_key = tg_api_key, trip_details = input_details)
+        itinerary = generate_itinerary(api_key = st.secrets['tg_api_key'], trip_details = input_details)
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
@@ -168,13 +168,4 @@ if submitted:
 
     latest_output = itinerary
 
-    #FIX - st.write(f"**Is there anything that you'd like me to help modify in your trip itinerary?")
-    feedback = st.chat_input("Type your answer here")
-
-    if feedback:
-        with st.spinner(text="Revising your trip based on your feedback..."):
-            prompt = "Could you help revise my trip based on my feedback: " + feedback
-            latest_output = generate_itinerary(api_key=tg_api_key, trip_details=prompt)
-
-        st.write(latest_output)
 
