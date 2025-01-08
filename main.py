@@ -129,7 +129,7 @@ with st.form(key = 'submission_form', enter_to_submit = False):
     for question in questions:
         input_type = question['InputType']
         question_text = question['QuestionText']
-        placeholder = 'e.g., ' + question['PlaceholderText']
+        placeholder = question['PlaceholderText']
         requirement = question['Requirement']
 
         # Create input widgets based on the InputType
