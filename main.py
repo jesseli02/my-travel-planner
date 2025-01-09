@@ -150,12 +150,22 @@ def feedback_submission(api_key, itinerary, user_feedback):
 st.title("Travel Itinerary Generator")
 
 # Pre-defined variables
-user_feedback = ""
-input_details = []
 tg_api_key = "cbea512d1bf322aee99d7ce57605f76213a88036512f376396654844eba7efe8"
+
+# Session states
+if 'trip_details' not in st.session_state:
+    st.session_state.trip_details = None
+
+if 'itinerary' not in st.session_state:
+    st.session_state.itinerary = None
+
+if 'feedback_log' not in st.session_state:
+    st.session_state.feedback_log = None
 
 # Create a form to collect user inputs
 with st.form(key = 'submission_form', enter_to_submit = False):
+    input_details = []
+
     for question in questions:
         input_type = question['InputType']
         question_text = question['QuestionText']
@@ -183,14 +193,18 @@ with st.form(key = 'submission_form', enter_to_submit = False):
 # Action once submit button is clicked
 if submitted:
 
+    # Store trip details in session state
+    st.session_state.trip_details = input_details
+
     # Display the entered travel details
     with st.expander("See your travel input details"):
         for item in input_details:
             st.markdown(f"**{item['question']}:** {item['answer']}")
 
-    # Prepare and call the Together AI API
+    # Prepare and call the Together AI API to generate initial itinerary
     with st.spinner(text = "Generating your itinerary..."):
         itinerary = form_submission(api_key = tg_api_key, input_details = input_details)
+    st.session_state.itinerary = itinerary
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
@@ -201,15 +215,6 @@ if submitted:
         label = f"\n** Please let me know if you'd like me to modify anything in your itinerary:",
         placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):"
     )
-
-    # Action for revising the itinerary
-    if st.button("Revise my itinerary"):
-
-        with st.spinner(text = "Re-generating your itinerary based on your feedback..."):
-            itinerary = feedback_submission(api_key = tg_api_key, itinerary = itinerary, user_feedback = user_feedback)
-
-        st.success("### Revised itinerary")
-        st.write(itinerary)
 
 
 
