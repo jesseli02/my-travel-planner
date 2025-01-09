@@ -120,7 +120,7 @@ def form_submission(api_key, input_details):
     content = data['choices'][0]['message']['content']
     return content
 
-def feedback_submission(api_key, itinerary, user_feedback):
+def handle_feedback(api_key, trip_details, itinerary, user_feedback):
     url = "https://api.together.xyz/v1/chat/completions"
     headers = {
         "accept": "application/json",
@@ -128,8 +128,8 @@ def feedback_submission(api_key, itinerary, user_feedback):
         "authorization": f"Bearer {api_key}"
     }
 
-    prompt_intro = "Could you help me revise my current trip itinerary based on the feedback below.\n"
-    full_prompt = prompt_intro + user_feedback + "\nCurrent itinerary:\n" + itinerary
+    prompt_intro = "Could you help me revise my current trip itinerary based on the feedback below? \n"
+    full_prompt = prompt_intro + user_feedback + "\nLatest itinerary version:\n" + itinerary
     payload = {
         "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
         "messages": [
@@ -160,7 +160,7 @@ if 'itinerary' not in st.session_state:
     st.session_state.itinerary = None
 
 if 'feedback_log' not in st.session_state:
-    st.session_state.feedback_log = None
+    st.session_state.feedback_log = []
 
 # Create a form to collect user inputs
 with st.form(key = 'submission_form', enter_to_submit = False):
@@ -210,11 +210,33 @@ if submitted:
     st.success("### Generated Itinerary")
     st.write(itinerary)
 
-    # Show feedback prompt
-    user_feedback = st.text_input(
-        label = f"\n** Please let me know if you'd like me to modify anything in your itinerary:",
-        placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):"
-    )
+# Feedback prompt
+if st.session_state.itinerary:
+    with st.form (key = 'feedback_form', border = False):
+
+        user_feedback = st.text_input(
+            label = "\n***Please let me know if you'd like me to modify anything in your itinerary:***",
+            placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):"
+        )
+
+        feedback_button = st.form_submit_button("Revise my itinerary")
+
+    if feedback_button:
+        with st.spinner(text = "Re-generating your itinerary..."):
+            itinerary = handle_feedback(
+                api_key = tg_api_key,
+                trip_details = st.session_state['trip_details'],
+                itinerary = st.session_state['itinerary'],
+                user_feedback = user_feedback
+            )
+
+        st.session_state.itinerary = itinerary
+        st.session_state.feedback_log = st.session_state.feedback_log.append(user_feedback)
+
+        st.success('### Revised Itinerary')
+        st.markdown(st.session_state.itinerary)
+
+
 
 
 
