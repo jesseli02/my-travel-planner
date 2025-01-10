@@ -162,7 +162,7 @@ if 'itinerary' not in st.session_state:
 if 'feedback_log' not in st.session_state:
     st.session_state.feedback_log = []
 
-st.session_state.count = None
+st.session_state.count = -1
 
 # Create a form to collect user inputs
 with st.form(key = 'submission_form', enter_to_submit = False):
