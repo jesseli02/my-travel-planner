@@ -210,7 +210,7 @@ if submitted:
     st.session_state.count += 1
 
 # Display the generated itinerary
-if st.session_state.itinerary:
+if st.session_state.itinerary == 0:
     st.success("### Generated Itinerary")
     st.write(st.session_state.itinerary[-1])
 
