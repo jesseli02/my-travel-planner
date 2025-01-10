@@ -213,7 +213,12 @@ if submitted:
 # Display the generated itinerary
 if st.session_state.count > 0:
 
-    # Ensure to display the latest itinerary version
+    # Show the version history
+    for versions in range(st.session_state.count - 1):
+        with st.expander(f"See itinerary version {versions + 1}"):
+            st.write(st.session_state.itinerary[versions])
+
+    #Show the latest itinerary
     if st.session_state.count == 1:
         st.success("### Generated itinerary")
     else:
@@ -242,10 +247,6 @@ if st.session_state.count > 0:
             st.session_state.itinerary.append(itinerary)
             st.session_state.feedback_log.append(user_feedback)
             st.session_state.count += 1
-
-        # Display revised itinerary
-        st.success(f"### Revised itinerary (version {st.session_state.count})")
-        st.write(st.session_state.itinerary[-1])
 
 
 
