@@ -162,7 +162,7 @@ if 'itinerary' not in st.session_state:
 if 'feedback_log' not in st.session_state:
     st.session_state.feedback_log = []
 
-st.session_state.count = 0
+st.session_state.count = None
 
 # Create a form to collect user inputs
 with st.form(key = 'submission_form', enter_to_submit = False):
@@ -207,7 +207,7 @@ if submitted:
     with st.spinner(text = "Generating your itinerary..."):
         itinerary = form_submission(api_key = tg_api_key, input_details = input_details)
     st.session_state.itinerary.append(itinerary)
-    st.session_state.count += 1
+    st.session_state.count = 0
 
 # Display the generated itinerary
 if st.session_state.itinerary == 0:
