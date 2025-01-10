@@ -212,14 +212,16 @@ if submitted:
 
 # Display the generated itinerary
 if st.session_state.count > 0:
+
+    # Ensure to display the latest itinerary version
     if st.session_state.count == 1:
-        st.success("### Generated Itinerary")
+        st.success("### Generated itinerary")
     else:
-        st.success("### Revised Itinerary")
+        st.success(f"### Revised itinerary (version {st.session_state.count})")
     st.write(st.session_state.itinerary[-1])
 
 # Feedback prompt
-    with st.form (key = 'feedback_form', border = False):
+    with st.form (key = f'feedback_form_{st.session_state.count}', border = False):
 
         user_feedback = st.text_input(
             label = "\n***Please let me know if you'd like me to modify anything in your itinerary:***",
@@ -242,7 +244,7 @@ if st.session_state.count > 0:
             st.session_state.count += 1
 
         # Display revised itinerary
-        st.success("### Revised Itinerary")
+        st.success(f"### Revised itinerary (version {st.session_state.count})")
         st.write(st.session_state.itinerary[-1])
 
 
