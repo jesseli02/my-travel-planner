@@ -162,6 +162,8 @@ if 'itinerary' not in st.session_state:
 if 'feedback_log' not in st.session_state:
     st.session_state.feedback_log = []
 
+st.session_state.count = 0
+
 # Create a form to collect user inputs
 with st.form(key = 'submission_form', enter_to_submit = False):
     input_details = []
@@ -205,13 +207,12 @@ if submitted:
     with st.spinner(text = "Generating your itinerary..."):
         itinerary = form_submission(api_key = tg_api_key, input_details = input_details)
     st.session_state.itinerary = itinerary
+    st.session_state.count += 1
 
     # Display the generated itinerary
     st.success("### Generated Itinerary")
     st.write(itinerary)
 
-# Feedback prompt
-if st.session_state.itinerary:
     with st.form (key = 'feedback_form', border = False):
 
         user_feedback = st.text_input(
@@ -221,6 +222,9 @@ if st.session_state.itinerary:
 
         feedback_button = st.form_submit_button("Revise my itinerary")
 
+# Feedback prompt
+if st.session_state.count > 0:
+
     if feedback_button:
         with st.spinner(text = "Re-generating your itinerary..."):
             itinerary = handle_feedback(
@@ -229,12 +233,24 @@ if st.session_state.itinerary:
                 itinerary = st.session_state['itinerary'],
                 user_feedback = user_feedback
             )
+            st.session_state.count += 1
 
         st.session_state.itinerary = itinerary
         st.session_state.feedback_log = st.session_state.feedback_log.append(user_feedback)
 
         st.success('### Revised Itinerary')
         st.markdown(st.session_state.itinerary)
+
+    with st.form (key = 'feedback_form', border = False):
+
+        user_feedback = st.text_input(
+            label = "\n***Please let me know if you'd like me to modify anything in your itinerary:***",
+            placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):"
+        )
+
+        feedback_button = st.form_submit_button("Revise my itinerary")
+
+
 
 
 
