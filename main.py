@@ -239,7 +239,7 @@ if st.session_state.itinerary:
             st.session_state.count += 1
 
         st.success('### Revised Itinerary')
-        st.markdown(st.session_state.itinerary)
+        st.write(st.session_state.itinerary[-1])
 
 
 
