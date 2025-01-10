@@ -157,7 +157,7 @@ if 'trip_details' not in st.session_state:
     st.session_state.trip_details = None
 
 if 'itinerary' not in st.session_state:
-    st.session_state.itinerary = None
+    st.session_state.itinerary = []
 
 if 'feedback_log' not in st.session_state:
     st.session_state.feedback_log = []
