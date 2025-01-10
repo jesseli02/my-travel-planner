@@ -229,8 +229,8 @@ if st.session_state.itinerary:
         with st.spinner(text = "Re-generating your itinerary..."):
             itinerary = handle_feedback(
                 api_key = tg_api_key,
-                trip_details = st.session_state['trip_details'],
-                itinerary = st.session_state['itinerary'],
+                trip_details = st.session_state.trip_details,
+                itinerary = st.session_state.itinerary[-1],
                 user_feedback = user_feedback
             )
 
