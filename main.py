@@ -233,10 +233,9 @@ if st.session_state.itinerary:
                 itinerary = st.session_state['itinerary'],
                 user_feedback = user_feedback
             )
-            st.session_state.count += 1
 
-        st.session_state.itinerary = itinerary
-        st.session_state.feedback_log = st.session_state.feedback_log.append(user_feedback)
+            st.session_state.itinerary = itinerary
+            st.session_state.feedback_log = st.session_state.feedback_log.append(user_feedback)
 
         st.success('### Revised Itinerary')
         st.markdown(st.session_state.itinerary)
