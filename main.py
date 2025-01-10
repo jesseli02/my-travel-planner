@@ -229,7 +229,7 @@ if st.session_state.count > 0:
     with st.form (key = f'feedback_form_{st.session_state.count}', border = False):
 
         user_feedback = st.text_input(
-            label = "\n***Please let me know if you'd like me to modify anything in your itinerary:***",
+            label = "\n**Please let me know if you'd like me to modify anything in your itinerary:**",
             placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):"
         )
 
