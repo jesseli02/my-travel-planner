@@ -210,12 +210,14 @@ if submitted:
     st.session_state.count = 0
 
 # Display the generated itinerary
-if st.session_state.itinerary == 0:
-    st.success("### Generated Itinerary")
+if st.session_state.count >= 0:
+    if st.session_state.count == 0:
+        st.success("### Generated Itinerary")
+    else:
+        st.success("### Revised Itinerary")
     st.write(st.session_state.itinerary[-1])
 
-# First feedback prompt
-
+# Feedback prompt
     with st.form (key = 'feedback_form', border = False):
 
         user_feedback = st.text_input(
@@ -237,9 +239,6 @@ if st.session_state.itinerary == 0:
             st.session_state.itinerary.append(itinerary)
             st.session_state.feedback_log.append(user_feedback)
             st.session_state.count += 1
-
-        st.success('### Revised Itinerary')
-        st.write(st.session_state.itinerary[-1])
 
 
 
