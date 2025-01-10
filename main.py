@@ -162,7 +162,8 @@ if 'itinerary' not in st.session_state:
 if 'feedback_log' not in st.session_state:
     st.session_state.feedback_log = []
 
-st.session_state.count = 0
+if 'count' not in st.session_state:
+    st.session_state.count = 0
 
 # Create a form to collect user inputs
 with st.form(key = 'submission_form', enter_to_submit = False):
@@ -213,7 +214,9 @@ if submitted:
 if st.session_state.count > 0:
     if st.session_state.count == 1:
         st.success("### Generated Itinerary")
-        st.write(st.session_state.itinerary[-1])
+    else:
+        st.success("### Revised Itinerary")
+    st.write(st.session_state.itinerary[-1])
 
 # Feedback prompt
     with st.form (key = 'feedback_form', border = False):
