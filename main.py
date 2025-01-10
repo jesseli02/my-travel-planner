@@ -213,9 +213,7 @@ if submitted:
 if st.session_state.count > 0:
     if st.session_state.count == 1:
         st.success("### Generated Itinerary")
-    else:
-        st.success("### Revised Itinerary")
-    st.write(st.session_state.itinerary[-1])
+        st.write(st.session_state.itinerary[-1])
 
 # Feedback prompt
     with st.form (key = 'feedback_form', border = False):
@@ -240,7 +238,9 @@ if st.session_state.count > 0:
             st.session_state.feedback_log.append(user_feedback)
             st.session_state.count += 1
 
-
+        # Display revised itinerary
+        st.success("### Revised Itinerary")
+        st.write(st.session_state.itinerary[-1])
 
 
 
