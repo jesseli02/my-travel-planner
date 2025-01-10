@@ -235,7 +235,7 @@ if st.session_state.itinerary:
             )
 
             st.session_state.itinerary.append(itinerary)
-            st.session_state.feedback_log = st.session_state.feedback_log.append(user_feedback)
+            st.session_state.feedback_log.append(user_feedback)
             st.session_state.count += 1
 
         st.success('### Revised Itinerary')
