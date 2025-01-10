@@ -206,13 +206,13 @@ if submitted:
     # Prepare and call the Together AI API to generate initial itinerary
     with st.spinner(text = "Generating your itinerary..."):
         itinerary = form_submission(api_key = tg_api_key, input_details = input_details)
-    st.session_state.itinerary = itinerary
+    st.session_state.itinerary.append(itinerary)
     st.session_state.count += 1
 
 # Display the generated itinerary
 if st.session_state.itinerary:
     st.success("### Generated Itinerary")
-    st.write(itinerary)
+    st.write(st.session_state.itinerary[-1])
 
 # First feedback prompt
 
@@ -234,8 +234,9 @@ if st.session_state.itinerary:
                 user_feedback = user_feedback
             )
 
-            st.session_state.itinerary = itinerary
+            st.session_state.itinerary.append(itinerary)
             st.session_state.feedback_log = st.session_state.feedback_log.append(user_feedback)
+            st.session_state.count += 1
 
         st.success('### Revised Itinerary')
         st.markdown(st.session_state.itinerary)
