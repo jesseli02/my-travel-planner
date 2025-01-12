@@ -129,7 +129,7 @@ def handle_feedback(api_key, trip_details, itinerary, user_feedback):
     }
 
     prompt_intro = "Could you help me revise my current trip itinerary based on the feedback below? \n"
-    full_prompt = prompt_intro + user_feedback + "\nLatest itinerary version:\n" + itinerary + "\nOriginal trip details:\n" + trip_details
+    full_prompt = prompt_intro + user_feedback + "\nLatest itinerary version:\n" + itinerary + "\nOriginal trip details:\n" + json.dumps(trip_details)
     payload = {
         "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
         "messages": [
