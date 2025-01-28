@@ -230,8 +230,6 @@ if submitted:
 # Display the generated itinerary
 if st.session_state.count > 0:
 
-    display_itineraries(st.session_state.count, st.session_state.itinerary)
-
     # Feedback prompt
     with st.form (key = f'feedback_form_{st.session_state.count}', border = False):
 
@@ -258,5 +256,4 @@ if st.session_state.count > 0:
             # Update the display with the new itinerary
             st.write("Itinerary updated successfully.")
             display_itineraries(st.session_state.count, st.session_state.itinerary)
-            st.write(st.session_state.count)
 
