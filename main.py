@@ -215,24 +215,23 @@ if st.session_state.count > 0:
 
     # Show the version history
     for versions in range(st.session_state.count - 1):
-        with st.expander(f"See itinerary version {versions + 1}"):
+        with st.expander(f"See itinerary version {versions + 1}", expanded = False):
             st.write(st.session_state.itinerary[versions])
 
     #Show the latest itinerary
-    if st.session_state.count == 1:
-        st.success("### Generated itinerary")
-    else:
-        st.success(f"### Revised itinerary (version {st.session_state.count})")
-    st.write(st.session_state.itinerary[-1])
-
-    st.write(st.session_state.count)
+    with st.expander(f"See itinerary version {st.session_state.count}", expanded = True):
+        if st.session_state.count == 1:
+            st.success("### Generated itinerary")
+        else:
+            st.success(f"### Revised itinerary (version {st.session_state.count})")
+        st.write(st.session_state.itinerary[-1])
 
 # Feedback prompt
     with st.form (key = f'feedback_form_{st.session_state.count}', border = False):
 
         user_feedback = st.text_input(
             label = "\n**Please let me know if you'd like me to modify anything in your itinerary:**",
-            placeholder = "Type your feedback here (e.g., Could you try to add small day-trip hike into the itinerary?):"
+            placeholder = "e.g., Could you incorporate a day-trip hike into the itinerary?:"
         )
 
         feedback_button = st.form_submit_button("Revise my itinerary")
@@ -251,6 +250,5 @@ if st.session_state.count > 0:
             st.session_state.feedback_log.append(user_feedback)
             st.session_state.count += 1
 
-            st.write(st.session_state.count)
 
 
