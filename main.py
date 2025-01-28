@@ -120,6 +120,7 @@ def form_submission(api_key, input_details):
     content = data['choices'][0]['message']['content']
     return content
 
+# Function for follow-up feedback prompts
 def handle_feedback(api_key, trip_details, itinerary, user_feedback):
     url = "https://api.together.xyz/v1/chat/completions"
     headers = {
@@ -145,6 +146,22 @@ def handle_feedback(api_key, trip_details, itinerary, user_feedback):
     data = response.json()
     content = data['choices'][0]['message']['content']
     return content
+
+# Function  to display current and past itineraries
+def display_itineraries(count, itinerary):
+
+    # Show the version history
+    for versions in range(st.session_state.count - 1):
+        with st.expander(f"See itinerary version {versions + 1}", expanded = False):
+            st.write(st.session_state.itinerary[versions])
+
+    #Show the latest itinerary
+    with st.expander(f"See itinerary version {st.session_state.count}", expanded = True):
+        if st.session_state.count == 1:
+            st.success("### Generated itinerary")
+        else:
+            st.success(f"### Revised itinerary (version {st.session_state.count})")
+        st.write(st.session_state.itinerary[-1])
 
 # UI start
 st.title("Travel Itinerary Generator")
@@ -213,20 +230,9 @@ if submitted:
 # Display the generated itinerary
 if st.session_state.count > 0:
 
-    # Show the version history
-    for versions in range(st.session_state.count - 1):
-        with st.expander(f"See itinerary version {versions + 1}", expanded = False):
-            st.write(st.session_state.itinerary[versions])
+    display_itineraries(st.session_state.count, st.session_state.itinerary)
 
-    #Show the latest itinerary
-    with st.expander(f"See itinerary version {st.session_state.count}", expanded = True):
-        if st.session_state.count == 1:
-            st.success("### Generated itinerary")
-        else:
-            st.success(f"### Revised itinerary (version {st.session_state.count})")
-        st.write(st.session_state.itinerary[-1])
-
-# Feedback prompt
+    # Feedback prompt
     with st.form (key = f'feedback_form_{st.session_state.count}', border = False):
 
         user_feedback = st.text_input(
@@ -245,10 +251,12 @@ if st.session_state.count > 0:
                 user_feedback = user_feedback
             )
 
-
             st.session_state.itinerary.append(itinerary)
             st.session_state.feedback_log.append(user_feedback)
             st.session_state.count += 1
 
-
+            # Update the display with the new itinerary
+            st.write("Itinerary updated successfully.")
+            display_itineraries(st.session_state.count, st.session_state.itinerary)
+            st.write(st.session_state.count)
 
