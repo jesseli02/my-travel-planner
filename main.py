@@ -225,6 +225,8 @@ if st.session_state.count > 0:
         st.success(f"### Revised itinerary (version {st.session_state.count})")
     st.write(st.session_state.itinerary[-1])
 
+    st.write(st.session_state.count)
+
 # Feedback prompt
     with st.form (key = f'feedback_form_{st.session_state.count}', border = False):
 
@@ -244,10 +246,11 @@ if st.session_state.count > 0:
                 user_feedback = user_feedback
             )
 
+
             st.session_state.itinerary.append(itinerary)
             st.session_state.feedback_log.append(user_feedback)
             st.session_state.count += 1
 
-
+            st.write(st.session_state.count)
 
 
